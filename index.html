@@ -1,0 +1,37 @@
+<!doctype html>
+<html class="h-100">
+    <head>
+        <!-- TODO: Figure out how to include CodeMirror from node -->
+        <script src="node_modules/codemirror/lib/codemirror.js"></script>
+        <link rel="stylesheet" href="node_modules/codemirror/lib/codemirror.css">
+        <script src="node_modules/codemirror/mode/clike/clike.js"></script>
+        <link rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+            integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+            crossorigin="anonymous">
+        <style>
+            .main-editor {
+                width: 50%;
+                height: 40%;
+                border: 2px inset #dee;
+            }
+        </style>
+    </head>
+
+    <body class="d-flex flex-column h-100">
+        <main role="main" class="flex-shrink-0">
+            <div class="container">
+                <h5 class="mt-5">SootLab</h5>
+                <textarea id="java-code" class="main-editor"></textarea>
+            </div>
+        </main>
+
+        <footer class="footer mt-auto py-3">
+            <div class="container">
+                <span class="text-muted">Some footnote I have to add.</span>
+            </div>
+        </footer>
+
+        <script src="editor.js"></script>
+    </body>
+</html>
