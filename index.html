@@ -11,8 +11,8 @@
             crossorigin="anonymous">
         <style>
             .main-editor {
-                width: 50%;
-                height: 40%;
+                width: 100%;
+                height: 100%;
                 border: 2px inset #dee;
             }
         </style>
@@ -21,8 +21,25 @@
     <body class="d-flex flex-column h-100">
         <main role="main" class="flex-shrink-0">
             <div class="container">
-                <h5 class="mt-5">SootLab</h5>
-                <textarea id="java-code" class="main-editor"></textarea>
+                <div class="row">
+                    <!-- Title and instructions col -->
+                    <div class="col-sm">
+                        <h5 class="mt-5">SootLab</h5>
+                    </div>
+                    <!-- Some buttons col -->
+                    <div class="col-sm">
+                        <button type="button" onclick="compile()" class="btn btn-primary mt-5">Compile</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <!-- Java input col -->
+                    <div class="col-sm">
+                        <textarea id="java-code" class="main-editor"></textarea>
+                    </div>
+                    <div class="col-sm">
+                        <textarea class="main-editor" id="generated-output"></textarea>
+                    </div>
+                </div>
             </div>
         </main>
 
