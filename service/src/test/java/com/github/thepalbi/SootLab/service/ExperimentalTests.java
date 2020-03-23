@@ -39,7 +39,7 @@ public class ExperimentalTests {
 
     @Test
     public void test() throws IOException {
-
+        // https://stackoverflow.com/questions/39239285/how-to-get-list-of-class-files-generated-by-javacompiler-compilationtask
         File[] filesToCompile = new File[] {new File("/Users/thepalbi/Facultad/aap/SootLab/service/src/test/java/com/github/thepalbi/SootLab/service/SampleThingForCompilation.java")};
         fileManager.setLocation(StandardLocation.CLASS_OUTPUT, Collections.singleton(tempDirectory.toFile()));
         Iterable<? extends JavaFileObject> outputObjects = fileManager.getJavaFileObjects(filesToCompile);
