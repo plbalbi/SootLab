@@ -1,6 +1,8 @@
 package com.github.thepalbi.SootLab.service.services;
 
 import com.github.thepalbi.SootLab.service.services.erros.FileManagerException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,8 @@ import java.nio.file.Paths;
 
 @Service
 public class JavaTemporaryFileManager implements TemporaryFileManager {
+
+    private Logger logger = LoggerFactory.getLogger(JavaTemporaryFileManager.class);
 
     final private String fileManagerPrefix;
 
@@ -41,6 +45,9 @@ public class JavaTemporaryFileManager implements TemporaryFileManager {
     public Path getFileWithContentsNamed(String contents, String name) throws FileManagerException {
         try {
             Path composedSourceFilePath = Paths.get(fileManagerTmpDir.toString(), name);
+
+            logger.info("Writing contents to file {}", composedSourceFilePath.toString());
+
             File sourceFile = new File(composedSourceFilePath.toUri());
             FileWriter writer = new FileWriter(sourceFile);
             writer.write(contents);
