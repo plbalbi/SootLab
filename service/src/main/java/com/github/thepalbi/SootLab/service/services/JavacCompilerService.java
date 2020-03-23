@@ -17,23 +17,36 @@ import java.util.Locale;
 @Service
 public class JavacCompilerService implements CompilerService {
 
+    public static final String PACKAGE_TO_LIST_FROM = "";
+    private TemporaryFileManager tempFileManager;
     private JavaCompiler compiler;
     private StandardJavaFileManager fileManager;
 
-    private final TemporaryFileManager tempFileManager;
-
     @Autowired
     public JavacCompilerService(TemporaryFileManager tempFileManager) throws FileManagerException, IOException {
-        this.tempFileManager = tempFileManager;
         compiler = ToolProvider.getSystemJavaCompiler();
         fileManager = compiler.getStandardFileManager(null, null, null);
+        this.tempFileManager = tempFileManager;
 
-        // TODO: Handle IOException better
-        fileManager.setLocation(StandardLocation.CLASS_OUTPUT, Collections.singleton(tempFileManager.getDirectory().toFile()));
     }
 
+    /**
+     * @param sources
+     * @return The File to the directory containing the compiled outputs
+     * @throws CompilationException
+     * @throws FileManagerException
+     */
     @Override
-    public List<ClassFile> compile(List<SourceFile> sources) throws CompilationException {
+    public File compile(List<SourceFile> sources) throws CompilationException, FileManagerException {
+        File compiledClassesDirectory = tempFileManager.getDirectory().toFile();
+        try {
+            // Creating a directory for each compilation
+            fileManager.setLocation(StandardLocation.CLASS_OUTPUT, Collections.singleton(compiledClassesDirectory));
+        } catch (IOException e) {
+            // TODO: Handle IOException better
+            throw new FileManagerException(e);
+        }
+
         DiagnosticCollector<JavaFileObject> diagnosticCollector = new DiagnosticCollector<>();
         JavaCompiler.CompilationTask task = compiler.getTask(null,
                 fileManager,
@@ -41,7 +54,9 @@ public class JavacCompilerService implements CompilerService {
                 null,
                 null,
                 sources);
+
         if (!task.call()) {
+            // TODO: Extract this into a custom DiagnosticCollector
             StringBuilder messageBuilder = new StringBuilder();
             messageBuilder.append("Compilation diagnostics: \n");
             diagnosticCollector.getDiagnostics().stream()
@@ -55,15 +70,7 @@ public class JavacCompilerService implements CompilerService {
                                     .append("\n"));
             throw new CompilationException(messageBuilder.toString());
         }
-        try {
-            Iterable<JavaFileObject> compiledUnits = fileManager.list(StandardLocation.CLASS_OUTPUT,
-                    "", Collections.singleton(JavaFileObject.Kind.CLASS), true);
-            List<ClassFile> compilerClassFiles = new LinkedList<>();
-            compiledUnits.forEach(compiledUnit -> compilerClassFiles.add(new ClassFile(compiledUnit.toUri())));
-            return compilerClassFiles;
-        } catch (IOException e) {
-            throw new CompilationException("Error listing compiled sources");
-        }
+        return compiledClassesDirectory;
     }
 
     @PreDestroy

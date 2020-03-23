@@ -1,6 +1,8 @@
 package com.github.thepalbi.SootLab.service.services;
 
 import java.net.URI;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 // NOTE: Is this necessary?
 public class ClassFile {
@@ -13,5 +15,9 @@ public class ClassFile {
 
     public String getPath() {
         return uriToFile.getPath();
+    }
+
+    public Path asPath() {
+        return Paths.get(uriToFile);
     }
 }
