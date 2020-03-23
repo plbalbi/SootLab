@@ -17,6 +17,10 @@ function compile() {
         method: "POST",
         body: editorContents
     })
-    .then(data => console.log("Received the follwoing data: " + data))
+    .then(response => response.text())
+    .then(data => {
+        console.log("Received the follwoing data: " + data);
+        document.getElementById("generated-output").innerText = data;
+    })
 
 }

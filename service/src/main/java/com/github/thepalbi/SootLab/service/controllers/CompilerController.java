@@ -11,9 +11,7 @@ import com.github.thepalbi.SootLab.service.services.erros.CompilationException;
 import com.github.thepalbi.SootLab.service.services.erros.FileManagerException;
 import com.github.thepalbi.SootLab.service.services.erros.PackagerException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import soot.PackManager;
 import soot.Printer;
 import soot.Scene;
@@ -29,6 +27,7 @@ import static java.util.Collections.EMPTY_LIST;
 import static java.util.Collections.singletonList;
 
 @RestController
+@CrossOrigin("http://localhost:8000")
 public class CompilerController {
 
     @Autowired
@@ -40,7 +39,7 @@ public class CompilerController {
     @Autowired
     private PackagerService packagerService;
 
-    @RequestMapping("/compile")
+    @PostMapping("/compile")
     public String compileSources(@RequestBody String sourceCode) throws FileManagerException, CompilationException, PackagerException {
 
         CompilationUnit compilationUnit = StaticJavaParser.parse(sourceCode);
