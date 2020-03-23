@@ -4,18 +4,15 @@ import com.github.thepalbi.SootLab.service.services.erros.CompilationException;
 import com.github.thepalbi.SootLab.service.services.erros.FileManagerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sun.jvm.hotspot.debugger.windbg.WindbgThreadFactory;
-import sun.tools.java.ClassFile;
 
 import javax.annotation.PreDestroy;
 import javax.tools.*;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class JavacCompilerService implements CompilerService {
@@ -37,18 +34,35 @@ public class JavacCompilerService implements CompilerService {
 
     @Override
     public List<ClassFile> compile(List<SourceFile> sources) throws CompilationException {
-        JavaCompiler.CompilationTask task = compiler.getTask(null, fileManager, null, null, null, sources);
-        if (!task.call()){
-            throw new CompilationException();
+        DiagnosticCollector<JavaFileObject> diagnosticCollector = new DiagnosticCollector<>();
+        JavaCompiler.CompilationTask task = compiler.getTask(null,
+                fileManager,
+                diagnosticCollector,
+                null,
+                null,
+                sources);
+        if (!task.call()) {
+            StringBuilder messageBuilder = new StringBuilder();
+            messageBuilder.append("Compilation diagnostics: \n");
+            diagnosticCollector.getDiagnostics().stream()
+                    .forEach(diagnostic ->
+                            messageBuilder.append(String.format(
+                                    "[%s] %s-%d: %s",
+                                    diagnostic.getKind().toString(),
+                                    diagnostic.getSource().getName(),
+                                    diagnostic.getLineNumber(),
+                                    diagnostic.getMessage(Locale.ENGLISH)))
+                                    .append("\n"));
+            throw new CompilationException(messageBuilder.toString());
         }
         try {
             Iterable<JavaFileObject> compiledUnits = fileManager.list(StandardLocation.CLASS_OUTPUT,
                     "", Collections.singleton(JavaFileObject.Kind.CLASS), true);
             List<ClassFile> compilerClassFiles = new LinkedList<>();
-            compiledUnits.forEach(compiledUnit -> compilerClassFiles.add(new ClassFile(new File(compiledUnit.toUri()))));
+            compiledUnits.forEach(compiledUnit -> compilerClassFiles.add(new ClassFile(compiledUnit.toUri())));
             return compilerClassFiles;
         } catch (IOException e) {
-            throw new CompilationException();
+            throw new CompilationException("Error listing compiled sources");
         }
     }
 

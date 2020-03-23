@@ -10,9 +10,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.attribute.FileAttribute;
-import java.nio.file.attribute.PosixFileAttributes;
-import java.nio.file.attribute.PosixFilePermissions;
+import java.nio.file.Paths;
 
 @Service
 public class JavaTemporaryFileManager implements TemporaryFileManager {
@@ -40,11 +38,13 @@ public class JavaTemporaryFileManager implements TemporaryFileManager {
     }
 
     @Override
-    public Path getFileWithContents(String contents) throws FileManagerException {
+    public Path getFileWithContentsNamed(String contents, String name) throws FileManagerException {
         try {
-            File sourceFile = Files.createTempFile(fileManagerTmpDir, "", "").toFile();
+            Path composedSourceFilePath = Paths.get(fileManagerTmpDir.toString(), name);
+            File sourceFile = new File(composedSourceFilePath.toUri());
             FileWriter writer = new FileWriter(sourceFile);
             writer.write(contents);
+            // TODO: This might end up dangling, add an auto-closing scope
             writer.close();
             return sourceFile.toPath();
         } catch (IOException e) {

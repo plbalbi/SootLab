@@ -6,5 +6,5 @@ import java.nio.file.Path;
 
 public interface TemporaryFileManager {
     Path getDirectory() throws FileManagerException;
-    Path getFileWithContents(String contents) throws FileManagerException;
+    Path getFileWithContentsNamed(String contents, String name) throws FileManagerException;
 }
