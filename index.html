@@ -4,6 +4,7 @@
         <!-- TODO: Figure out how to include CodeMirror from node -->
         <script src="node_modules/codemirror/lib/codemirror.js"></script>
         <link rel="stylesheet" href="node_modules/codemirror/lib/codemirror.css">
+        <link rel="stylesheet" href="node_modules/codemirror/theme/idea.css">
         <script src="node_modules/codemirror/mode/clike/clike.js"></script>
         <link rel="stylesheet"
             href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
@@ -18,39 +19,35 @@
         </style>
     </head>
 
-    <body class="d-flex flex-column h-100">
-        <main role="main" class="flex-shrink-0">
-            <div class="container">
-                <div class="row">
-                    <!-- Title and instructions col -->
-                    <div class="col-sm">
-                        <h5 class="mt-5">SootLab</h5>
-                    </div>
-                    <!-- Some buttons col -->
-                    <div class="col-sm">
-                        <button type="button" onclick="compile()" class="btn btn-primary mt-5">Compile</button>
-                    </div>
+    <body class="h-100">
+        <div class="container-fluid h-100">
+            <div class="row" style="height: 40px;">
+                <!-- Title and instructions col -->
+                <div class="col mt-2">
+                    <h5>SootLab</h5>
                 </div>
-                <div class="row">
-                    <!-- Java input col -->
-                    <div class="col-sm">
-                        <textarea id="java-code" class="main-editor"></textarea>
-                    </div>
-                    <div class="col-sm">
-                        <div id="main-editor">
-                            <pre id="generated-output"></pre>
-                        </div>
+                <!-- Some buttons col -->
+                <div class="col">
+                    <button type="button" onclick="compile()" class="btn btn-primary">Compile</button>
+                </div>
+            </div>
+            <div class="row h-100">
+                <!-- Java input col -->
+                <div class="col w-50">
+                    <textarea id="java-code"></textarea>
+                </div>
+                <div class="col">
+                    <div id="main-editor">
+                        <pre id="generated-output"></pre>
                     </div>
                 </div>
             </div>
-        </main>
-
-        <footer class="footer mt-auto py-3">
-            <div class="container">
-                <span class="text-muted">Some footnote I have to add.</span>
-            </div>
-        </footer>
-
+            <footer class="footer mt-1 py-3">
+                <div class="container">
+                    <span class="text-muted">Some footnote I have to add.</span>
+                </div>
+            </footer>
+        </div>
         <script src="editor.js"></script>
     </body>
 </html>
