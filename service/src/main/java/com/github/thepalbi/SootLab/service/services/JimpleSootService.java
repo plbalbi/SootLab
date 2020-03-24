@@ -1,6 +1,7 @@
 package com.github.thepalbi.SootLab.service.services;
 
 import com.github.thepalbi.SootLab.service.services.erros.SootException;
+import org.springframework.stereotype.Service;
 import soot.G;
 import soot.PackManager;
 import soot.Printer;
@@ -16,6 +17,7 @@ import static java.util.Collections.singletonList;
 /**
  * Soot service implementation that uses the Jimple IR.
  */
+@Service
 public class JimpleSootService implements SootService {
 
     // TODO: This method is not thread-safe. So with it's current implementations,
