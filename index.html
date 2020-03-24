@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="h-100">
+<html>
     <head>
         <!-- TODO: Figure out how to include CodeMirror from node -->
         <script src="node_modules/codemirror/lib/codemirror.js"></script>
@@ -19,19 +19,13 @@
         </style>
     </head>
 
-    <body class="h-100">
-        <div class="container-fluid h-100">
-            <div class="row" style="height: 40px;">
-                <!-- Title and instructions col -->
-                <div class="col mt-2">
-                    <h5>SootLab</h5>
-                </div>
-                <!-- Some buttons col -->
-                <div class="col">
-                    <button type="button" onclick="compile()" class="btn btn-primary">Compile</button>
-                </div>
-            </div>
-            <div class="row h-100">
+    <body>
+        <nav class="navbar navbar-dark bg-dark" style="height: 60px;">
+            <h5 class="navbar-brand col-sm-3 col-md-2 mr-0">SootLab</h5>
+            <button type="button" onclick="compile()" class="btn btn-primary">Compile</button>
+        </nav>
+        <div class="container-fluid">
+            <div class="row d-md-flex flex-md-equal" style="height: calc(100vh - 60px);">
                 <!-- Java input col -->
                 <div class="col w-50">
                     <textarea id="java-code"></textarea>
@@ -42,11 +36,6 @@
                     </div>
                 </div>
             </div>
-            <footer class="footer mt-1 py-3">
-                <div class="container">
-                    <span class="text-muted">Some footnote I have to add.</span>
-                </div>
-            </footer>
         </div>
         <script src="editor.js"></script>
     </body>
