@@ -1,5 +1,6 @@
 package com.github.thepalbi.SootLab.service.services;
 
+import com.github.thepalbi.SootLab.service.compilation.CompilerDiagnostic;
 import com.github.thepalbi.SootLab.service.services.erros.CompilationException;
 import com.github.thepalbi.SootLab.service.services.erros.FileManagerException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +10,10 @@ import javax.annotation.PreDestroy;
 import javax.tools.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class JavacCompilerService implements CompilerService {
@@ -56,19 +57,16 @@ public class JavacCompilerService implements CompilerService {
                 sources);
 
         if (!task.call()) {
-            // TODO: Extract this into a custom DiagnosticCollector
-            StringBuilder messageBuilder = new StringBuilder();
-            messageBuilder.append("Compilation diagnostics: \n");
-            diagnosticCollector.getDiagnostics().stream()
-                    .forEach(diagnostic ->
-                            messageBuilder.append(String.format(
-                                    "[%s] %s-%d: %s",
-                                    diagnostic.getKind().toString(),
-                                    diagnostic.getSource().getName(),
-                                    diagnostic.getLineNumber(),
-                                    diagnostic.getMessage(Locale.ENGLISH)))
-                                    .append("\n"));
-            throw new CompilationException(messageBuilder.toString());
+            List<CompilerDiagnostic> collectedDiagnostics = diagnosticCollector.getDiagnostics().stream()
+                    .map(diagnostic -> new CompilerDiagnostic(
+                            diagnostic.getCode(),
+                            diagnostic.getMessage(Locale.ENGLISH),
+                            diagnostic.getKind(),
+                            Collections.emptyList(),
+                            diagnostic.getLineNumber(),
+                            diagnostic.getColumnNumber()))
+                    .collect(toList());
+            throw new CompilationException(collectedDiagnostics);
         }
         return compiledClassesDirectory;
     }

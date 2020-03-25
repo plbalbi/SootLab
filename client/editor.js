@@ -31,10 +31,10 @@ function compile() {
         method: "POST",
         body: editorContents
     })
-    .then(response => response.text())
-    .then(data => {
-        console.log("Received the follwoing data: " + data);
-        document.getElementById("generated-output").innerText = data;
+    .then(response => response.json())
+    .then(compilationResult => {
+        console.log("Received the follwoing data: " + compilationResult.x + " with this diagnostics: " + compilationResult.diagnostics);
+        document.getElementById("generated-output").innerText = compilationResult.x;
     })
 
 }
