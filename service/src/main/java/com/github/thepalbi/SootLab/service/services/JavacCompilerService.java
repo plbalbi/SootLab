@@ -57,6 +57,7 @@ public class JavacCompilerService implements CompilerService {
                 sources);
 
         if (!task.call()) {
+            // Here, for further error-tooling, getStartPosition, getEndPosition can be used.
             List<CompilerDiagnostic> collectedDiagnostics = diagnosticCollector.getDiagnostics().stream()
                     .map(diagnostic -> new CompilerDiagnostic(
                             diagnostic.getCode(),
