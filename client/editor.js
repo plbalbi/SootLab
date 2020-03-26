@@ -48,8 +48,13 @@ function compile() {
         method: "POST",
         body: editorContents
     })
+    .catch(connectionError => {
+        document.getElementById("connection_diagnostic").innerText = "Connection problems"
+        console.error("There seems to be some connection problem with the backend: " + connectionError);
+    })
     .then(response => response.json())
     .then(compilationResult => {
+        document.getElementById("connection_diagnostic").innerText = ""
         console.log("Received the follwoing data: " + compilationResult.x + " with this diagnostics: " + compilationResult.diagnostics);
         document.getElementById("generated-output").innerText = compilationResult.x;
     })

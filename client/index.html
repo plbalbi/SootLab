@@ -17,13 +17,26 @@
                 height: 100%;
                 border: 2px inset #dee;
             }
+
+            .btn-compile {
+                color: #fff;
+                font-weight: 500;
+                border-color: #555fe6;
+            }
+
+            .navbar-main {
+                max-height: 60px;
+            }
         </style>
     </head>
 
     <body>
-        <nav class="navbar navbar-dark bg-dark" style="height: 60px;">
-            <h5 class="navbar-brand col-sm-3 col-md-2 mr-0">SootLab</h5>
-            <button type="button" onclick="compile()" class="btn btn-primary">Compile</button>
+        <nav class="navbar navbar-main navbar-dark bg-dark justify-content-between">
+            <h5 class="navbar-brand mr-0">SootLab</h5>
+            <p class="navbar-text mr-3 ml-auto mb-0" id="connection_diagnostic"></p>
+            <form class="form-inline">
+                <button class="btn btn-compile" onclick="compile()">Compile</button>
+            </form>
         </nav>
         <div class="container-fluid">
             <div class="row d-md-flex flex-md-equal" style="height: calc(100vh - 60px);">
