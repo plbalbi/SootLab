@@ -1,6 +1,7 @@
 package com.github.thepalbi.SootLab.service.services;
 
 import com.github.thepalbi.SootLab.service.compilation.CompilerDiagnostic;
+import com.github.thepalbi.SootLab.service.domain.SourceFile;
 import com.github.thepalbi.SootLab.service.services.erros.CompilationException;
 import com.github.thepalbi.SootLab.service.services.erros.FileManagerException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,6 @@ import javax.tools.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 

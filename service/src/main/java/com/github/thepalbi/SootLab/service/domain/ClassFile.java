@@ -1,4 +1,4 @@
-package com.github.thepalbi.SootLab.service.services;
+package com.github.thepalbi.SootLab.service.domain;
 
 import java.net.URI;
 import java.nio.file.Path;

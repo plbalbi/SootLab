@@ -1,4 +1,4 @@
-package com.github.thepalbi.SootLab.service.services;
+package com.github.thepalbi.SootLab.service.domain;
 
 import javax.tools.SimpleJavaFileObject;
 import java.io.File;

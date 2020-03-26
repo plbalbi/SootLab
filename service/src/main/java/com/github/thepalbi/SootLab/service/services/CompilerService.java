@@ -1,5 +1,6 @@
 package com.github.thepalbi.SootLab.service.services;
 
+import com.github.thepalbi.SootLab.service.domain.SourceFile;
 import com.github.thepalbi.SootLab.service.services.erros.CompilationException;
 import com.github.thepalbi.SootLab.service.services.erros.FileManagerException;
 

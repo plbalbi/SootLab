@@ -4,8 +4,8 @@ import com.github.thepalbi.SootLab.service.compilation.CompilerDiagnostic;
 
 import java.util.List;
 
-public class CompilationException extends DiagnosticsDrivenException {
-    public CompilationException(List<CompilerDiagnostic> diagnostics) {
+public class ClassNameExtractionException extends ParseException {
+    public ClassNameExtractionException(List<CompilerDiagnostic> diagnostics) {
         super(diagnostics);
     }
 }

@@ -20,7 +20,7 @@ import static java.util.stream.Collectors.toList;
 @ControllerAdvice
 public class CompilationExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(CompilationException.class)
+    @ExceptionHandler(DiagnosticsDrivenException.class)
     protected ResponseEntity<Object> handleJavacCompilationError(CompilationException exception) {
         StringBuilder errorMessageBuilder = new StringBuilder();
         exception.getDiagnostics().stream()

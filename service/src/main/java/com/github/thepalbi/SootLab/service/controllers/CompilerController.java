@@ -4,11 +4,10 @@ import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.thepalbi.SootLab.service.compilation.CompilationResult;
+import com.github.thepalbi.SootLab.service.domain.SootCompileRequest;
+import com.github.thepalbi.SootLab.service.domain.SourceFile;
 import com.github.thepalbi.SootLab.service.services.*;
-import com.github.thepalbi.SootLab.service.services.erros.CompilationException;
-import com.github.thepalbi.SootLab.service.services.erros.FileManagerException;
-import com.github.thepalbi.SootLab.service.services.erros.PackagerException;
-import com.github.thepalbi.SootLab.service.services.erros.SootException;
+import com.github.thepalbi.SootLab.service.services.erros.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,25 +37,22 @@ public class CompilerController {
     @Autowired
     private SootService sootService;
 
-    @PostMapping("/compile")
-    public CompilationResult compileSources(@RequestBody String sourceCode) throws FileManagerException, CompilationException, PackagerException, SootException {
-        CompilationUnit compilationUnit = StaticJavaParser.parse(sourceCode);
-        Optional<ClassOrInterfaceDeclaration> classDeclaration = compilationUnit.findAll(ClassOrInterfaceDeclaration.class).stream()
-                .findFirst();
+    @Autowired
+    private EnrichmentService enrichmentService;
 
-        if (!classDeclaration.isPresent()) {
-            // TODO: Fail here, this is DEV
-            return new CompilationResult("ERROR");
-        }
+    @PostMapping("/compile")
+    public CompilationResult compileAndTranslate(@RequestBody String sourceCode) throws FileManagerException, CompilationException, PackagerException, SootException, ParseException {
+        SootCompileRequest baseRequest = SootCompileRequest.withSourceCode(sourceCode);
+        SootCompileRequest withClassEnrichedRequest = enrichmentService.enrich(baseRequest);
+        // If no error is thrown by the enriched, the request contains the target class name.
 
         // TODO: This should utilize a directory per session, or use the UUID postfixed file solution
-        Path pathToSourceCodeFile = tempFileManager.getFileWithContentsNamed(compilationUnit.toString(), classDeclaration.get().getNameAsString() + ".java");
+        Path pathToSourceCodeFile = tempFileManager.getFileWithContentsNamed(withClassEnrichedRequest.getSourceCode(), withClassEnrichedRequest.getMainClassName() + ".java");
 
         // NOTE: Should this SourceFile be a public thing?
-        // NOTE: Maybe return CompilationResult or sth like that?
         File compiledClassesDirectory = compilerService.compile(singletonList(new SourceFile(pathToSourceCodeFile)));
         Path jarPackagedClasses = packagerService.pack(compiledClassesDirectory);
-        String jimpleGeneratedSource = sootService.runClassThroughBodyPack(jarPackagedClasses, classDeclaration.get().getFullyQualifiedName().get());
+        String jimpleGeneratedSource = sootService.runClassThroughBodyPack(jarPackagedClasses, withClassEnrichedRequest.getMainClassName());
         return new CompilationResult(jimpleGeneratedSource);
     }
 }
