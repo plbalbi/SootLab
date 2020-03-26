@@ -21,7 +21,7 @@ import static java.util.stream.Collectors.toList;
 public class CompilationExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(DiagnosticsDrivenException.class)
-    protected ResponseEntity<Object> handleJavacCompilationError(CompilationException exception) {
+    protected ResponseEntity<Object> handleJavacCompilationError(DiagnosticsDrivenException exception) {
         StringBuilder errorMessageBuilder = new StringBuilder();
         exception.getDiagnostics().stream()
                 .filter(diagnostic -> diagnostic.isOfKind(Diagnostic.Kind.ERROR))

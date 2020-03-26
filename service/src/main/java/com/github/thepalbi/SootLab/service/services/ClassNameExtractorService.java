@@ -23,7 +23,7 @@ public class ClassNameExtractorService implements EnrichmentService {
     public static final String PARSE_ERROR = "PARSE_ERROR";
     public static final List<CompilerDiagnostic> NO_CLASS_DIAGNOSTIC_LIST = Collections.singletonList(new CompilerDiagnostic(
             PARSE_ERROR,
-            "No class name found.",
+            "No class name found, or class somehow does not have fully qualified name.",
             Diagnostic.Kind.ERROR,
             Collections.emptyList()
     ));
@@ -47,13 +47,14 @@ public class ClassNameExtractorService implements EnrichmentService {
         Optional<ClassOrInterfaceDeclaration> classDeclaration = compilationUnit
                 .findAll(ClassOrInterfaceDeclaration.class).stream()
                 .findFirst();
-        if (!classDeclaration.isPresent()) {
+        if (!classDeclaration.isPresent() || !classDeclaration.get().getFullyQualifiedName().isPresent()) {
             throw new ClassNameExtractionException(NO_CLASS_DIAGNOSTIC_LIST);
         }
 
         SootCompileRequest sootCompileRequest = new SootCompileRequest();
         sootCompileRequest.setSourceCode(request.getSourceCode());
         sootCompileRequest.setMainClassName(classDeclaration.get().getNameAsString());
+        sootCompileRequest.setFullyQualifiedName(classDeclaration.get().getFullyQualifiedName().get());
         return sootCompileRequest;
     }
 }

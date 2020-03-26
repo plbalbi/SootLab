@@ -52,7 +52,7 @@ public class CompilerController {
         // NOTE: Should this SourceFile be a public thing?
         File compiledClassesDirectory = compilerService.compile(singletonList(new SourceFile(pathToSourceCodeFile)));
         Path jarPackagedClasses = packagerService.pack(compiledClassesDirectory);
-        String jimpleGeneratedSource = sootService.runClassThroughBodyPack(jarPackagedClasses, withClassEnrichedRequest.getMainClassName());
+        String jimpleGeneratedSource = sootService.runClassThroughBodyPack(jarPackagedClasses, withClassEnrichedRequest.getFullyQualifiedName());
         return new CompilationResult(jimpleGeneratedSource);
     }
 }
