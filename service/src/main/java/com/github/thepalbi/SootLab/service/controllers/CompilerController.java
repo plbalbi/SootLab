@@ -44,13 +44,9 @@ public class CompilerController {
     public CompilationResult compileAndTranslate(@RequestBody String sourceCode) throws FileManagerException, CompilationException, PackagerException, SootException, ParseException {
         SootCompileRequest baseRequest = SootCompileRequest.withSourceCode(sourceCode);
         SootCompileRequest withClassEnrichedRequest = enrichmentService.enrich(baseRequest);
+
         // If no error is thrown by the enriched, the request contains the target class name.
-
-        // TODO: This should utilize a directory per session, or use the UUID postfixed file solution
-        Path pathToSourceCodeFile = tempFileManager.getFileWithContentsNamed(withClassEnrichedRequest.getSourceCode(), withClassEnrichedRequest.getMainClassName() + ".java");
-
-        // NOTE: Should this SourceFile be a public thing?
-        File compiledClassesDirectory = compilerService.compile(singletonList(new SourceFile(pathToSourceCodeFile)));
+        File compiledClassesDirectory = compilerService.compile(withClassEnrichedRequest);
         Path jarPackagedClasses = packagerService.pack(compiledClassesDirectory);
         String jimpleGeneratedSource = sootService.runClassThroughBodyPack(jarPackagedClasses, withClassEnrichedRequest.getFullyQualifiedName());
         return new CompilationResult(jimpleGeneratedSource);
