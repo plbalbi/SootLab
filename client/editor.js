@@ -44,7 +44,7 @@ function developBootstrap() {
 
 function compile() {
     var editorContents = javaEditor.getValue();
-    fetch("http://localhost:8080/compile", {
+    fetch("/api/compile", {
         method: "POST",
         body: editorContents
     })
