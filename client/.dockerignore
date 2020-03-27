@@ -1,5 +1,4 @@
 Dockerfile
 package.json
 start.sh
-client.conf
 node_modules/

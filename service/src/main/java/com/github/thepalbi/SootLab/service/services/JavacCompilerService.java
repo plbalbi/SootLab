@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -24,8 +25,8 @@ public class JavacCompilerService implements CompilerService {
     private StandardJavaFileManager fileManager;
 
     @Autowired
-    public JavacCompilerService(TemporaryFileManager tempFileManager) throws FileManagerException, IOException {
-        compiler = ToolProvider.getSystemJavaCompiler();
+    public JavacCompilerService(TemporaryFileManager tempFileManager) {
+        compiler = requireNonNull(ToolProvider.getSystemJavaCompiler(), "Compiler instance cannot be null");
         fileManager = compiler.getStandardFileManager(null, null, null);
         this.tempFileManager = tempFileManager;
 

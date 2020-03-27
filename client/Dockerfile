@@ -8,4 +8,4 @@ RUN rm /etc/nginx/conf.d/*
 # Copy all statics, including /node_modules directory
 COPY . /usr/share/nginx/html/
 # Copy NGINX config file
-COPY client.conf /etc/nginx/conf.d/
+COPY ./client.conf /etc/nginx/conf.d/

@@ -1,0 +1,8 @@
+version: "2.0"
+services: 
+    frontend:
+        build: client/
+        ports:
+            - "80:80"
+    backend:
+        build: service/
