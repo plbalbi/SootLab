@@ -19,6 +19,9 @@ import static java.util.stream.Collectors.toList;
 @Service
 public class JavacCompilerService implements CompilerService {
 
+    // TODO: Change this to use Janino. There are some problem when using SystemJavaCompiler with
+    // custom classLoaders as SpringBoot uses. http://janino-compiler.github.io/janino/
+
     public static final String PACKAGE_TO_LIST_FROM = "";
     private TemporaryFileManager tempFileManager;
     private JavaCompiler compiler;
