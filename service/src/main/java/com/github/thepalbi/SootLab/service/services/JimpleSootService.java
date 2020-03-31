@@ -20,11 +20,11 @@ import static java.util.Collections.singletonList;
 @Service
 public class JimpleSootService implements SootService {
 
-    // TODO: This method is not thread-safe. So with it's current implementations,
-    // it cannot run concurrently. Solve this by using a lock or sth.
+    // NOTE: Used synchronized for the moment. It's a horrible solution.
+    // TODO: Implement some kind worker-pool to process Soot service requests, by having one classloader per worker, with Soot loaded.
 
     @Override
-    public String runClassThroughBodyPack(Path pathToJar, String className) throws SootException {
+    public synchronized String runClassThroughBodyPack(Path pathToJar, String className) throws SootException {
         // Jimple output format
         Options.v().set_output_format(Options.output_format_jimple);
         // Add rt.jar

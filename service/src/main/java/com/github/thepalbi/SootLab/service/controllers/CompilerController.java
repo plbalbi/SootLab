@@ -1,23 +1,18 @@
 package com.github.thepalbi.SootLab.service.controllers;
 
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.thepalbi.SootLab.service.compilation.CompilationResult;
 import com.github.thepalbi.SootLab.service.domain.SootCompileRequest;
-import com.github.thepalbi.SootLab.service.domain.SourceFile;
 import com.github.thepalbi.SootLab.service.services.*;
 import com.github.thepalbi.SootLab.service.services.erros.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.Optional;
-
-import static java.util.Collections.singletonList;
 
 @RestController
 public class CompilerController {
