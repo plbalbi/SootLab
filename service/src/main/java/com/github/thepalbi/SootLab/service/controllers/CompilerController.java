@@ -20,7 +20,6 @@ import java.util.Optional;
 import static java.util.Collections.singletonList;
 
 @RestController
-@CrossOrigin("http://localhost:8000")
 public class CompilerController {
 
     private Logger logger = LoggerFactory.getLogger(CompilerController.class);
