@@ -39,10 +39,30 @@ public class CompilerController {
         SootCompileRequest baseRequest = SootCompileRequest.withSourceCode(sourceCode);
         SootCompileRequest withClassEnrichedRequest = enrichmentService.enrich(baseRequest);
 
-        // If no error is thrown by the enriched, the request contains the target class name.
-        File compiledClassesDirectory = compilerService.compile(withClassEnrichedRequest);
-        Path jarPackagedClasses = packagerService.pack(compiledClassesDirectory);
-        String jimpleGeneratedSource = sootService.runClassThroughBodyPack(jarPackagedClasses, withClassEnrichedRequest.getFullyQualifiedName());
-        return new CompilationResult(jimpleGeneratedSource);
+        File compiledClassesDirectory = null;
+        File packagedClassesFile = null;
+
+        try {
+            // If no error is thrown by the enriched, the request contains the target class name.
+            compiledClassesDirectory = compilerService.compile(withClassEnrichedRequest);
+            Path jarPackagedClasses = packagerService.pack(compiledClassesDirectory);
+            packagedClassesFile = jarPackagedClasses.toFile();
+            String jimpleGeneratedSource = sootService.runClassThroughBodyPack(jarPackagedClasses, withClassEnrichedRequest.getFullyQualifiedName());
+            return new CompilationResult(jimpleGeneratedSource);
+        } finally {
+            // Clean up generated filesystem resources
+            if (compiledClassesDirectory != null) deleteRecursive(compiledClassesDirectory);
+            if (packagedClassesFile != null) deleteRecursive(packagedClassesFile);
+        }
+    }
+
+    private static void deleteRecursive(File dir) {
+        File[] innerFiles = dir.listFiles();
+        if (innerFiles != null) {
+            for (File innerFile : innerFiles) {
+                deleteRecursive(innerFile);
+            }
+        }
+        dir.delete();
     }
 }
