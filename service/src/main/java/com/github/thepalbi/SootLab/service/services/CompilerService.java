@@ -7,5 +7,5 @@ import com.github.thepalbi.SootLab.service.services.erros.FileManagerException;
 import java.io.File;
 
 public interface CompilerService {
-    File compile(SootCompileRequest request) throws CompilationException, FileManagerException;
+    File compile(SootCompileRequest request) throws Exception, FileManagerException;
 }

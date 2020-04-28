@@ -30,17 +30,17 @@ public class JaninoCompilerService implements CompilerService {
     // custom classLoaders as SpringBoot uses. http://janino-compiler.github.io/janino/
 
     private TemporaryFileManager tempFileManager;
-    private ICompiler compiler;
 
     @Autowired
     public JaninoCompilerService(TemporaryFileManager tempFileManager) throws Exception {
-        compiler = requireNonNull(CompilerFactoryFactory.getDefaultCompilerFactory().newCompiler(), "Compiler instance cannot be null");
         this.tempFileManager = tempFileManager;
 
     }
 
     @Override
-    public File compile(SootCompileRequest request) throws CompilationException, FileManagerException {
+    public File compile(SootCompileRequest request) throws Exception, FileManagerException {
+        // TODO: Find out what the compiler need to be recreated in each request
+        ICompiler compiler = requireNonNull(CompilerFactoryFactory.getDefaultCompilerFactory().newCompiler());
 
         // TODO: This ResourceCreator can be changed to an in-memory one
         File destinationDirectory = tempFileManager.getDirectory().toFile();

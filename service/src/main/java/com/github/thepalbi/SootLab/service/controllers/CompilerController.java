@@ -35,7 +35,7 @@ public class CompilerController {
     private EnrichmentService enrichmentService;
 
     @PostMapping("/compile")
-    public CompilationResult compileAndTranslate(@RequestBody String sourceCode) throws FileManagerException, CompilationException, PackagerException, SootException, ParseException {
+    public CompilationResult compileAndTranslate(@RequestBody String sourceCode) throws FileManagerException, Exception {
         SootCompileRequest baseRequest = SootCompileRequest.withSourceCode(sourceCode);
         SootCompileRequest withClassEnrichedRequest = enrichmentService.enrich(baseRequest);
 
